@@ -15,10 +15,20 @@ enum Priority: String, Codable {
 }
 
 class Goal: Codable, Hashable {
+    
+    static let openActivityType = "com.timmikelj.iHustle.openGoal"
+    
     var id: String
     var name: String { didSet { DataController.shared.didUpdate() } }
     var priority: Priority { didSet { DataController.shared.didUpdate() } }
     var isCompleted: Bool { didSet { DataController.shared.didUpdate() } }
+    
+    var userActivity: NSUserActivity {
+        let userActivity = NSUserActivity(activityType: Self.openActivityType)
+        userActivity.title = name
+        userActivity.userInfo = ["id": id]
+        return userActivity
+    }
 
     init(name: String, priority: Priority, isCompleted: Bool) {
         self.id = UUID().uuidString
@@ -26,7 +36,6 @@ class Goal: Codable, Hashable {
         self.priority = priority
         self.isCompleted = isCompleted
     }
-
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }

@@ -9,6 +9,9 @@
 import Foundation
 
 class Group: Codable, Hashable {
+    
+    static let openActivityType = "com.timmikelj.iHustle.openGroup"
+    
     let id: String
     var name: String { didSet { DataController.shared.didUpdate() } }
     var goals: [Goal]
@@ -19,6 +22,13 @@ class Group: Codable, Hashable {
         self.name = name
         self.goals = goals
         self.created = created
+    }
+    
+    var userActivity: NSUserActivity {
+        let userActivity = NSUserActivity(activityType: Self.openActivityType)
+        userActivity.title = name
+        userActivity.userInfo = ["id": id]
+        return userActivity
     }
 
     func hash(into hasher: inout Hasher) {

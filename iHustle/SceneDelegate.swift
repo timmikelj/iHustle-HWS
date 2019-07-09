@@ -20,6 +20,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         window?.tintColor = .systemBlue // context aware blue
         guard let _ = (scene as? UIWindowScene) else { return }
+        
+        if let userActivity = connectionOptions.userActivities.first ?? session.stateRestorationActivity {
+            configure(window: window, with: userActivity)
+        }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
@@ -49,7 +53,29 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
     }
-
+    
+    func configure(window: UIWindow?, with activity: NSUserActivity) {
+        
+        guard let id = activity.userInfo?["id"] as? String else { return }
+        guard let navController = window?.rootViewController as? UINavigationController else { return }
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        
+        if activity.activityType == Group.openActivityType {
+            guard let group = DataController.shared.groups.first(where: { $0.id == id }) else { return }
+            
+            let groupVC = storyboard.instantiateViewController(identifier: "EditGroup", creator: { coder in
+                EditGroupViewController(coder: coder, group: group)
+            })
+            
+            navController.pushViewController(groupVC, animated: false) // false - cause it's restoring the state
+        } else if activity.activityType == Goal.openActivityType {
+            // 3
+        }
+    }
+    
+    func stateRestorationActivity(for scene: UIScene) -> NSUserActivity? {
+        return scene.userActivity
+    }
 
 }
 

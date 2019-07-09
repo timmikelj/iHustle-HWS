@@ -37,6 +37,7 @@ class EditGroupViewController: UITableViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        view.window?.windowScene?.userActivity = group.userActivity
     }
 
     @objc func didUpdate() {
