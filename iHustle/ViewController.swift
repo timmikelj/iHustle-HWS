@@ -73,7 +73,8 @@ class ViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let group = DataController.shared.groups[indexPath.row]
-        edit(group)
+        if let group = dataSource?.itemIdentifier(for: indexPath) {
+            edit(group)
+        }
     }
 }
