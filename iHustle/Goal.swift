@@ -16,9 +16,9 @@ enum Priority: String, Codable {
 
 class Goal: Codable, Hashable {
     var id: String
-    var name: String
-    var priority: Priority
-    var isCompleted: Bool
+    var name: String { didSet { DataController.shared.didUpdate() } }
+    var priority: Priority { didSet { DataController.shared.didUpdate() } }
+    var isCompleted: Bool { didSet { DataController.shared.didUpdate() } }
 
     init(name: String, priority: Priority, isCompleted: Bool) {
         self.id = UUID().uuidString

@@ -10,7 +10,7 @@ import Foundation
 
 class Group: Codable, Hashable {
     let id: String
-    var name: String
+    var name: String { didSet { DataController.shared.didUpdate() } }
     var goals: [Goal]
     var created: Date
 
